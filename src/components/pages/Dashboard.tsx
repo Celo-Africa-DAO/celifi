@@ -13,6 +13,7 @@ import useTokenBalances from "../token/TokensData";
 import { useAccount } from "wagmi";
 import { Button } from "../ui/button";
 import RequestFeature from "../token/RequestFeature";
+import Activity from "@/components/activity/Activity";
 //import('@/components/token/TokensAll')
 
 const TokensTable = dynamic(() => import("../token/tokensAll"), {
@@ -29,13 +30,13 @@ const TokensPage = () => {
 	console.log("All datas", balances);
 	return (
 		<>
-			<RequestFeature
+			{/* <RequestFeature
 				reqFeatureOpen={reqFeatureOpen}
 				setReqFeatureOpen={setReqFeatureOpen}
 			/>
 			<Button onClick={() => setReqFeatureOpen(true)} className="bg-[#476520]  hover:bg-[#476520]/80 text-sm font-light rounded-full p-6 fixed bottom-20 transform left-1/2 -translate-x-1/2 z-40">
 				Request feature
-			</Button>
+			</Button> */}
 
 			<div className="">tokens</div>
 			{tabValue === "tokens" && !loading ? (
@@ -45,7 +46,8 @@ const TokensPage = () => {
 			) : tabValue === "defi" ? (
 				<DefiChart />
 			) : tabValue === "performance" ? (
-				<PerformanceChart />
+				// <PerformanceChart />
+				<TokenChart userAddress={address} TokensData={balances} />
 			) : null}
 
 			<div className="mt-6 md:mt-12 px-3 md:px-10">
@@ -57,6 +59,13 @@ const TokensPage = () => {
 							onClick={() => setTabValue("tokens")}
 						>
 							Tokens
+						</TabsTrigger>
+						<TabsTrigger
+							className=" flex flex-col text-xs sm:text-base  rounded-none px-4 md:px-8"
+							value="performance"
+							onClick={() => setTabValue("performance")}
+						>
+							Activity
 						</TabsTrigger>
 						{/* <TabsTrigger
 							className=" flex flex-col text-xs sm:text-base  rounded-none px-4 md:px-8"
@@ -90,7 +99,7 @@ const TokensPage = () => {
 						<Defi />
 					</TabsContent>
 					<TabsContent value="performance">
-						<Performance />
+						<Activity />
 					</TabsContent>
 				</Tabs>
 			</div>
