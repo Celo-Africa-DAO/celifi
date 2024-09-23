@@ -8,9 +8,6 @@ import SendTokenSelectDrawer from "./SendTokenSelectDrawer";
 const { ethers } = require("ethers-v6");
 import Scan from "../qr-scanner";
 import { Button } from "../ui/button";
-import { QrScanner } from "../qr-scanner/qr-scannerModal";
-import qrcodeIcon from "../../../public/svg/bx_qr-scan.svg"
-import Image from "next/image";
 
 interface SendTokenDrawerProps {
   sendDrawerOpen: boolean;
@@ -34,7 +31,9 @@ const SendTokenDrawer: React.FC<SendTokenDrawerProps> = ({
   const [openScanner,setOpenScanner]= useState<boolean>(false)
 
   const handleScan = (data: string) => {
-    setSendToWalletAddr(data); 
+    setSendToWalletAddr(data); // Store the scanned data in the state
+    // console.log("Scanned data:", data);
+    // alert(data)
   };
 
   useEffect(() => {
@@ -62,32 +61,24 @@ const SendTokenDrawer: React.FC<SendTokenDrawerProps> = ({
               onClick={() => setSendDrawerOpen(false)}
               className=" text-white/80 cursor-pointer ml-3 w-8 h-8"
             />
-          <div className="w-full flex items-center gap-1">
-  
-  <div className="flex-grow-[3]">
-    <Input
-      className="w-full rounded-3xl text-sm bg-transparent"
-      placeholder="Input wallet address"
-      onChange={(e) => setSendToWalletAddr(e.target.value)}
-      value={sendToWalletAddr}
-    />
-  </div>
-
-  
-  <div className="flex-grow-[1] flex justify-center items-center">
-    <div
-      className="bg-transparent"
-      onClick={() => {
-        setOpenScanner(true);
-        setSendToWalletAddr("");
-      }}
-    >
-      <Image src={qrcodeIcon} alt="scan" className="w-full h-auto" />
-    </div>
-  </div>
-</div>
-
-            
+            <div className=" flex-1 px-3">
+              <div>
+                <Input
+                  className="w-full md:w-[90%] mx-auto rounded-3xl text-sm bg-transparent"
+                  placeholder="Input wallet address"
+                  onChange={(e) => setSendToWalletAddr(e.target.value)}
+                  value={sendToWalletAddr}
+                />
+              </div>
+              <div className="mt-4">
+              <Button onClick={() => {
+    setOpenScanner(true);
+    setSendToWalletAddr(""); 
+  }}> <ScanBarcode size={24}  /></Button>
+              </div>
+             
+            </div>
+            {/* //new scan */}
            
           </div>
          
@@ -103,10 +94,10 @@ const SendTokenDrawer: React.FC<SendTokenDrawerProps> = ({
             ) : !isSendToAddrValid && sendToWalletAddr.length ? (
               <div className="break-all text-xs">Input valid address</div>
             ) : null}
-            
+            {openScanner && ( <Scan openQr={openScanner}  setOpenQr={setOpenScanner}  setonScan={handleScan} />)}
             
           </div>
-          {openScanner &&( <QrScanner isOpen={openScanner} setScan={setOpenScanner} setScanResult={handleScan} />)}
+          
           {isSendTokenSelectOpen && (
             <SendTokenSelectDrawer
               setIsSendTokenSelectOpen={setIsSendTokenSelectOpen}
